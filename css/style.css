@@ -1,7 +1,14 @@
 .active{
 	background-color: brown!important;
 }
-
+div{
+	width: 45%;
+	float: left;
+}
+div h2{
+	font-family: "Oswald",sans-serif;
+	padding: 1rem;
+}
 table {
 	margin:10% auto;
 	border:2px solid blue;
