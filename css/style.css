@@ -1,0 +1,63 @@
+.active{
+	background-color: brown!important;
+}
+
+table {
+	margin:10% auto;
+	border:2px solid blue;
+}
+tr.square {
+    border-radius: 10%;
+    width: 22px;
+    height: 22px;
+}
+
+td.square {
+	background-color:#2C3E50;
+    border-radius: 10%;
+    width: 22px;
+    height: 22px;
+}
+tr.line {
+	background-color: white;
+    width: 7px;
+    height: 7px;
+}
+td.line {
+	background-color: white;
+    width: 7px;
+    height: 7px;
+}
+div.jugador1 {
+	background-color: red;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    vertical-align: middle;
+    /*position: absolute;*/
+}
+div.jugador2 {
+	background-color: green;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+div.jugador3 {
+	background-color: cyan;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+div.jugador4 {
+	background-color: yellow;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    vertical-align: middle;
+}
