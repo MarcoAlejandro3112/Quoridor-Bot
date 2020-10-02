@@ -130,7 +130,8 @@ function mapa2(on){
 var start = 76;
 var goal = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 var goal2 = [72,73,74,75,76,77,78,79,80];
-var goal3 = [8,17,26,35,44,53,62,71,80]
+var goal3 = [8,17,26,35,44,53,62,71,80];
+var goal4 = [0,9,18,27,36,45,54,63,72]
 mapa1(false);
 mapa2(true);
 
@@ -140,12 +141,15 @@ function AI_Wilmar(G){
     stack.push(posiciones[2])
     if (posiciones[2] == 8 || posiciones[2] == 17 || posiciones[2] == 26 || posiciones[2] == 35 || posiciones[2] == 44 || posiciones[2] == 53 || posiciones[2] == 62 || posiciones[2] == 71 || posiciones[2] == 80) return posiciones[2]  
     else {
-        contador++
-        if (G[posiciones[2]][G[posiciones[2]].length - 1] == posiciones[0] || G[posiciones[2]][G[posiciones[2]].length - 1] == posiciones[1] || G[posiciones[2]][G[posiciones[2]].length - 1] == posiciones[3]){
+    	contador++
+    	if (G[posiciones[2]][G[posiciones[2]].length - 1] == posiciones[0] || G[posiciones[2]][G[posiciones[2]].length - 1] == posiciones[1] || G[posiciones[2]][G[posiciones[2]].length - 1] == posiciones[3]){
         	a = G[posiciones[2]][G[posiciones[2]].length - 1]
         	return G[a][G[posiciones[2]].length - 1]
         }
-        else return G[posiciones[2]][G[posiciones[2]].length - 1]
+        else{
+        	if (G[posiciones[2]][Math.floor(G[posiciones[2]].length/2)] < posiciones[2]) return G[posiciones[2]][G[posiciones[2]].length - 1]
+        	else return G[posiciones[2]][Math.floor(G[posiciones[2]].length/2)]
+        }
     }
 }
 
@@ -330,10 +334,6 @@ function desplazar(tecla){
 				if (!goal.includes(posicion)) {
 	    			camino = a_star(G, posicion, goal, posiciones);
 	    			posicion = camino[1];
-	    			if(goal.includes(posicion)){
-	    				alert("GANO EL JUGADOR 0")
-	    				winner = true;
-	    			}
 	    			console.log(posiciones);
 	    			posiciones[turno] = posicion
 	    			console.log("Moverse a posicion: ", posicion);
@@ -342,22 +342,50 @@ function desplazar(tecla){
 	    			celda = document.getElementById(id_1)
 	    			center.appendChild(ficha1)
 	    			celda.appendChild(center)
+	    			if(goal.includes(posicion)){
+	    				alert("GANO EL JUGADOR 0")
+	    				winner = true;
+	    			}
 				} 
 				turno = cambiar_turno(turno);
 			} else if(turno == 1){
 				if(!goal2.includes(posiciones[1])){
 					camino = _dfs(G,posiciones[1],goal2)
-					if(goal2.includes(posicion)){
+					console.log("CAMINO: " + camino)
+					if(!posiciones.includes(camino[1])){
+						posiciones[turno] = camino[1]
+						id_1 = "celda-" + camino[1];
+					} else {
+						for(i = 0;i<posiciones.length;i++){
+							if(i!=1 && posiciones[i] == camino[1]){
+								let diff = posiciones[i] - posiciones[1]
+								if(G[posiciones[i]].includes(posiciones[i] + diff)){
+									posiciones[turno] = posiciones[i] + diff;
+									id_1 = "celda-" + (posiciones[i] + diff);	
+								} else {
+									let npos;
+									for(x = 0;x<G[posiciones[1]].length;x++){
+										if(!posiciones.includes(G[posiciones[1]][x])){
+											npos = G[posiciones[1][x]]
+											break;
+										}
+									}
+									posiciones[turno] = npos;
+									id_1 = "celda-" + npos;
+									console.log("IMPORTANTE=====: " + npos)
+								}
+								break;
+							}
+						}
+					}
+					center = document.createElement("center");
+	    			celda = document.getElementById(id_1)
+	    			center.appendChild(ficha1);
+	    			celda.appendChild(center)	
+	    			if(goal2.includes(camino[1])){
 						alert("GANO EL JUGADOR 1")
 						winner = true
 					}
-					console.log("CAMINO: " + camino)
-					posiciones[turno] = camino[1]
-					id_1 = "celda-" + camino[1];
-	    			center = document.createElement("center");
-	    			celda = document.getElementById(id_1)
-	    			center.appendChild(ficha1);
-	    			celda.appendChild(center)
 				}
 				turno = cambiar_turno(turno)
 			} else if(turno == 2){
@@ -370,54 +398,121 @@ function desplazar(tecla){
 	    			celda = document.getElementById(id_1)
 	    			center.appendChild(ficha1);
 	    			celda.appendChild(center)
+	    			if(goal3.includes(camino)){
+	    				alert("GANO EL JUGADOR 2")
+	    				winner = true;
+	    			}
 				}
 				turno = cambiar_turno(turno)
 			}
 		break;
 		case 97:
 			if(posiciones[turno] - 1 >= 0 && turno > 2){
-				id_1 = "celda-" + (posiciones[turno] - 1)
-				center = document.createElement("center");
-				posiciones[turno] -=1
-				celda = document.getElementById(id_1)
-				celda.appendChild(center)
-				center.appendChild(ficha1)
-				turno = cambiar_turno(turno);
+				if (condicionales_J1("Izquierda")){
+					posiciones[turno] -= 1
+					if (posiciones[turno] == posiciones[0] || posiciones[turno] == posiciones[1] || posiciones[turno] == posiciones[2]){
+						if(condicionales_J1("Izquierda")) posiciones[turno] -= 1
+					}
+					id_1 = "celda-" + (posiciones[turno])
+					center = document.createElement("center");
+					celda = document.getElementById(id_1)
+					celda.appendChild(center)
+					center.appendChild(ficha1)
+					turno = cambiar_turno(turno);
+				}
 			}
+			if(goal4.includes(posicion[3])){
+	    		alert("GANO EL JUGADOR 3")
+	    		winner = true;
+	    	}
 		break;
 		case 119:
-			if(posiciones[turno] - 9 >= 0 && turno > 2){ 
-				id_1 = "celda-" + (posiciones[turno] - 9)
-				center = document.createElement("center");
-				posiciones[turno] -= 9
-				celda = document.getElementById(id_1)
-				celda.appendChild(center)
-				center.appendChild(ficha1)
-				turno = cambiar_turno(turno);
+			if(posiciones[turno] - 9 >= 0 && turno > 2){
+				if (condicionales_J1("Abajo")){
+					posiciones[turno] -= 9
+					if (posiciones[turno] == posiciones[0] || posiciones[turno] == posiciones[1] || posiciones[turno] == posiciones[2]){
+						if(condicionales_J1("Abajo")) posiciones[turno] -= 9
+					}
+					id_1 = "celda-" + (posiciones[turno])
+					center = document.createElement("center");
+					celda = document.getElementById(id_1)
+					celda.appendChild(center)
+					center.appendChild(ficha1)
+					turno = cambiar_turno(turno);
+				}
 			}
+			if(goal4.includes(posicion[3])){
+	    		alert("GANO EL JUGADOR 3")
+	    		winner = true;
+	    	}
 		break;
 		case 100:
 			if(posiciones[turno] + 1 <= 80 && turno > 2){
-				id_1 = "celda-" + (posiciones[turno] + 1)
-				center = document.createElement("center");
-				posiciones[turno] += 1
-				celda = document.getElementById(id_1)
-				celda.appendChild(center)
-				center.appendChild(ficha1)
-				turno = cambiar_turno(turno);
+				if (condicionales_J1("Derecha")){
+					posiciones[turno] += 1
+					if (posiciones[turno] == posiciones[0] || posiciones[turno] == posiciones[1] || posiciones[turno] == posiciones[2]){
+						if(condicionales_J1("Derecha")) posiciones[turno] += 1
+					}
+					id_1 = "celda-" + (posiciones[turno])
+					center = document.createElement("center");
+					celda = document.getElementById(id_1)
+					celda.appendChild(center)
+					center.appendChild(ficha1)
+					turno = cambiar_turno(turno);
+				}
 			}
+			if(goal4.includes(posicion[3])){
+	    		alert("GANO EL JUGADOR 3")
+	    		winner = true;
+	    	}
 		break;
 		case 115:
 			if(posiciones[turno] + 9 <= 80 && turno > 2){
-				id_1 = "celda-" + (posiciones[turno] + 9)
-				center = document.createElement("center");
-				posiciones[turno] += 9
-				celda = document.getElementById(id_1)
-				celda.appendChild(center)
-				center.appendChild(ficha1)
-				turno = cambiar_turno(turno);
+				if (condicionales_J1("Arriba")){
+					posiciones[turno] += 9
+					if (posiciones[turno] == posiciones[0] || posiciones[turno] == posiciones[1] || posiciones[turno] == posiciones[2]){
+						if (condicionales_J1("Arriba")) posiciones[turno] += 9
+					}
+					id_1 = "celda-" + (posiciones[turno])
+					center = document.createElement("center");
+					celda = document.getElementById(id_1)
+					celda.appendChild(center)
+					center.appendChild(ficha1)
+					turno = cambiar_turno(turno);
+				}
 			}
+			if(goal4.includes(posicion[3])){
+	    		alert("GANO EL JUGADOR 3")
+	    		winner = true;
+	    	}
 		break;
 
+	}
+}
+
+function condicionales_J1(Direccion){
+	if (Direccion == "Izquierda"){
+		for (let i = 0; i < G[posiciones[3]].length; ++i){
+			if(G[posiciones[3]][i] == posiciones[3] - 1) return true
+		}
+		return false
+	}
+	if (Direccion == "Derecha"){
+		for (let i = 0; i < G[posiciones[3]].length; ++i){
+			if(G[posiciones[3]][i] == posiciones[3] + 1) return true
+		}
+		return false
+	}
+	if (Direccion == "Arriba"){
+		for (let i = 0; i < G[posiciones[3]].length; ++i){
+			if(G[posiciones[3]][i] == posiciones[3] + 9) return true
+		}
+		return false
+	}
+	if (Direccion == "Abajo"){
+		for (let i = 0; i < G[posiciones[3]].length; ++i){
+			if(G[posiciones[3]][i] == posiciones[3] - 9) return true
+		}
+		return false
 	}
 }

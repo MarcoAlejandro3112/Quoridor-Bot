@@ -5,9 +5,19 @@ div{
 	width: 45%;
 	float: left;
 }
+div.first-child{
+	padding: 2rem;
+}
 div h2{
 	font-family: "Oswald",sans-serif;
+	padding: 0rem 1rem;
+	margin-bottom: 0;
+}
+div p{
+	font-family: "Roboto",sans-serif;
+	font-size: 0.8rem!important;
 	padding: 1rem;
+	line-height: 1.5rem;
 }
 table {
 	margin:10% auto;
