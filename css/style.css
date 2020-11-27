@@ -8,6 +8,10 @@ div{
 div.first-child{
 	padding: 2rem;
 }
+input[type="number" i] {
+    margin: 0 1rem;
+}
+
 div h2{
 	font-family: "Oswald",sans-serif;
 	padding: 0rem 1rem;
@@ -16,7 +20,7 @@ div h2{
 div p{
 	font-family: "Roboto",sans-serif;
 	font-size: 0.8rem!important;
-	padding: 1rem;
+	padding: 0rem 1rem;
 	line-height: 1.5rem;
 }
 table {
@@ -26,6 +30,9 @@ table {
 tr.square {
     border-radius: 10%;
     width: 22px;
+    color:#fff;
+    font-size: 0.1rem;
+    text-align: center;
     height: 22px;
 }
 
@@ -34,16 +41,22 @@ td.square {
     border-radius: 10%;
     width: 22px;
     height: 22px;
+    font-size: 0.1rem;
+    text-align: center;
 }
 tr.line {
 	background-color: white;
     width: 7px;
     height: 7px;
+    font-size: 0.1rem;
+    text-align: center;
 }
 td.line {
 	background-color: white;
-    width: 7px;
-    height: 7px;
+    font-size: 0.1rem;
+    text-align: center;
+    width: 3px;
+    height: 3px;
 }
 div.jugador1 {
 	background-color: red;

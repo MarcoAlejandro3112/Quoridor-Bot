@@ -1,0 +1,473 @@
+let Paredes = [5, 5, 5, 5]
+let Turno = 0
+let nn = 81
+let Posiciones = [76,4,36,44]
+let Grafo = new Array(nn)
+let n = 9
+let Meta_Jugador1 = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+let Meta_Jugador2 = [72,73,74,75,76,77,78,79,80]
+let Meta_Jugador3 = [8,17,26,35,44,53,62,71,80]
+let Meta_Jugador4 = [0,9,18,27,36,45,54,63,72]
+let Distancias = []
+let Winner = false
+class Stack{
+    constructor(){
+        this.data = []
+        this.top = 0
+    }
+    push(element) {
+      this.data[this.top] = element
+      this.top = this.top + 1
+    }
+   length() {
+      return this.top
+   }
+   peek() {
+      return this.data[this.top-1];
+   }
+   isEmpty() {
+     return this.top === 0
+   }
+   pop() {
+    if( this.isEmpty() === false ) {
+       this.top = this.top -1
+       return this.data.pop()
+     }
+   }
+   print() {
+      var top = this.top - 1
+      while(top >= 0) {
+          console.log(this.data[top])
+           top--
+       }
+    }
+    reverse() {
+       this._reverse(this.top - 1 )
+    }
+    _reverse(index) {
+       if(index != 0) {
+          this._reverse(index-1)
+       }
+       console.log(this.data[index])
+    }
+}
+for (let i = 0; i < nn; i++){
+    Grafo[i] = new Array()
+}
+for (let v = 0; v < nn; v++){
+    if (v >= n) {
+        let u = v - n;
+        Grafo[v].push(u);
+        Grafo[u].push(v);
+    }
+    if (v % n != 0) {
+        let u = v - 1;
+        Grafo[v].push(u)
+        Grafo[u].push(v)
+    }
+}
+function remove_edge(G, a, b){
+	G[a].splice(G[a].indexOf(b), 1)
+	G[b].splice(G[b].indexOf(a), 1)
+}
+
+function AI_Gabriel(g, s, w, p, num) {
+	var aux_move = null
+	aux_idx = 0
+    var nn = g.length
+    var n = Number(Math.sqrt(nn))
+    var pos_opponent = []
+    for(i = 1;i<p.length;i++){
+    	pos_opponent.push(p[i])
+    }
+    var fin = -1
+
+    var parent = new Array(nn)
+    var f_cost = new Array(nn)
+    var g_cost = new Array(nn)
+    var h_cost = new Array(nn)
+
+    parent.fill(null)
+    f_cost.fill(999)
+    g_cost.fill(999)
+    h_cost.fill(0)
+	
+	if(num == 0){
+		for (var v = 0; v < nn; v++) {
+			h_cost[v] = Math.floor(v / n)
+		}
+	}
+	if(num == 1){
+		for (var v = 0; v < nn; v++) {
+			h_cost[v] = (n-1) - v%n
+		}
+	}
+	if(num == 2){
+		for (var v = 0; v < nn; v++) {
+			h_cost[v] = (n-1) - Math.floor(v / n)
+		}
+	}
+	if(num == 3){
+		for (var v = 0; v < nn; v++) {
+			h_cost[v] = v%n
+		}
+	}
+
+    var open = new Array()
+    var closed = new Array()
+
+    open.push(s)
+
+    g_cost[s] = 0
+    f_cost[s] = g_cost[s] + h_cost[s]
+
+    function lowestf() {
+        var minf = f_cost[open[0]]
+        var mini = open[0]
+        
+        for (var x = 0; x < open.length; x++) {
+            if (f_cost[open[x]] < minf) {
+                minf = f_cost[open[x]]
+                mini = open[x]
+            }
+        }
+        return mini
+    }
+
+    while (true) {
+        var current = lowestf()
+        open.splice(open.indexOf(current), 1)
+
+        closed.push(current)
+
+        if (w.includes(current)) {
+            fin = current
+            break
+        }
+
+        for (var x = 0; x < g[current].length; x++) {
+          var vecino = g[current][x]
+            function comp_veci(veci) {
+                if ((g_cost[current] + 1 < g_cost[veci]) || (!open.includes(veci))) {
+                    g_cost[veci] = g_cost[current] + 1
+                    f_cost[veci] = g_cost[veci] + h_cost[veci]
+                    parent[veci] = current
+                    if (!open.includes(veci)) {
+                        open.push(veci)
+                    }
+                }
+            }
+
+            if (pos_opponent.includes(vecino)) {              
+                closed.push(vecino)
+                var jump = vecino + (vecino - current)
+                if (g[vecino].includes(jump)) {
+                    vecino = jump
+                    
+                } else {
+                    for (var x = 0; x < g[vecino].length; x++) {                      
+                      new_vecino = g[vecino][x];
+                        if (!closed.includes(new_vecino)) {
+                            comp_veci(new_vecino)
+                        }
+                    }
+                }
+            }
+
+            if (closed.includes(vecino)) {
+                continue
+            }
+
+            comp_veci(vecino)
+        }
+
+    }
+
+    var camino = new Array()
+    var aux = fin
+    
+
+    while (aux != null) {
+        camino.push(aux)
+        aux = parent[aux]
+    }
+	camino.reverse()
+    return camino
+}
+
+function AI_Marco(G, s, w, posiciones){
+    stack = new Stack()
+    stack.push(s);
+    camino = []
+    visitados = []
+    for(i = 0;i < 80; i++){
+        visitados[i] = false;
+    }
+    while(true){
+        curNode = stack.peek()
+        if(!posiciones.includes(curNode)){
+            camino.push(curNode)
+        } else {
+            for(i = 0;i<posiciones.length;i++){
+                if(i!=1 && posiciones[i] == curNode){
+                    let diff = posiciones[i] - posiciones[1]
+                    if(G[posiciones[i]].includes(posiciones[i] + diff)){
+                        curNode = posiciones[i] + diff;
+                        camino.push(curNode)
+                    } else {
+                        let npos;
+                        for(x = 0;x<G[curNode].length;x++){
+                            if(!posiciones.includes(G[curNode][x])){
+                                npos = G[curNode][x]
+                                break;
+                            }
+                        }
+                        curNode = npos
+                        camino.push(curNode);
+                    }
+                    break;
+                }
+            }
+        }
+        visitados[curNode] = true
+         if( w.includes(curNode)){
+            break;
+        }
+        let unvisited = 0;
+        for(i = 0;i<G[curNode].length;i++){
+            if(visitados[G[curNode][i]]==false){
+                stack.push(G[curNode][i])
+                unvisited++
+            }
+        }
+
+        if(unvisited == 0){
+            stack.pop()
+        }
+    }
+    return camino
+}
+
+function AI_Wilmar(G, s, w){
+	let Datos = new Stack()
+	Datos.push(s)
+	let Camino = [s]
+	while(!w.includes(Datos.peek())){
+		if (G[Datos.peek()][Math.round(G[Datos.peek()].length / 2)] == Posiciones[0] || G[Datos.peek()][Math.round(G[Datos.peek()].length / 2)] == Posiciones[1] || G[Datos.peek()][Math.round(G[Datos.peek()].length / 2)] == Posiciones[3]){
+			let Salto = G[Datos.peek()][Math.round(G[Datos.peek()].length / 2)]
+			let a = G[Salto][Math.round(G[Salto].length / 2)]
+			Datos.push(a)
+			Camino.push(Datos.peek())
+		}
+		else{
+			let a = G[Datos.peek()][Math.round(G[Datos.peek()].length / 2)]
+			Datos.push(a)
+			Camino.push(Datos.peek())
+		}
+	}
+	return Camino
+}
+
+function Jugador1(){
+	if(Meta_Jugador1.includes(Posiciones[0])){
+		Winner = true
+		alert("JUGADOR 1 GANADOR")
+	}
+	Distancias = Calcular_Jugadas_Restantes()
+	if((Distancias[0] <= Distancias[1] && Distancias[0] <= Distancias[2] && Distancias[0] <= Distancias[3]) || Paredes[0] == 0){
+		//console.log("BIEN")
+		let Camino = AI_Gabriel(Grafo, Posiciones[0], Meta_Jugador1, Posiciones, 0)
+		console.log("Jugador 1 se mueve de: " + Posiciones[0] + " a " + Camino[1])
+		Posiciones[0] = Camino[1]
+	}
+	else{
+		//console.log("BIEN")
+		if(Distancias[1] < Distancias[2] && Distancias[1] < Distancias[3]){
+			let Camino_Jugador2 = AI_Marco(Grafo, Posiciones[1], Meta_Jugador2, Posiciones)
+			if(Valida_Paredes(Grafo, Posiciones[1], Camino_Jugador2[1])) Paredes[0]--
+			else{
+				let Camino = AI_Gabriel(Grafo, Posiciones[0], Meta_Jugador1, Posiciones, 0)
+				console.log("Jugador 1 se mueve de: " + Posiciones[0] + " a " + Camino[1])
+				Posiciones[0] = Camino[1]
+			}
+		}
+		else if(Distancias[2] < Distancias[1] && Distancias[2] < Distancias[3]){
+			let Camino_Jugador3 = AI_Wilmar(Grafo, Posiciones[2], Meta_Jugador3)
+			if(Valida_Paredes(Grafo, Posiciones[2], Camino_Jugador3[1])) Paredes[0]--
+			else{
+				let Camino = AI_Gabriel(Grafo, Posiciones[0], Meta_Jugador1, Posiciones, 0)
+				console.log("Jugador 1 se mueve de: " + Posiciones[0] + " a " + Camino[1])
+				Posiciones[0] = Camino[1]
+			}
+		}
+		else{
+			let Camino_Jugador4 = AI_Gabriel(Grafo, Posiciones[3], Meta_Jugador4, Posiciones, 3)
+			if(Valida_Paredes(Grafo, Posiciones[3], Camino_Jugador4[1])) Paredes[0]--
+			else{
+				let Camino = AI_Gabriel(Grafo, Posiciones[0], Meta_Jugador1, Posiciones, 0)
+				console.log("Jugador 1 se mueve de: " + Posiciones[0] + " a " + Camino[1])
+				Posiciones[0] = Camino[1]
+			}
+		}
+	}
+	Turno = 1
+}
+
+function Jugador2(){
+	if(Meta_Jugador2.includes(Posiciones[1])){
+		Winner = true
+		alert("JUGADOR 2 GANADOR")
+	}
+	Distancias = Calcular_Jugadas_Restantes()
+	if((Distancias[1] <= Distancias[0] && Distancias[1] <= Distancias[2] && Distancias[1] <= Distancias[3]) || Paredes[1] == 0){
+		let Camino = AI_Marco(Grafo, Posiciones[1], Meta_Jugador2, Posiciones)
+		console.log("Jugador 2 se mueve de: " + Posiciones[1] + " a " + Camino[1])
+		Posiciones[1] = Camino[1]
+	}
+	else{
+		if(Distancias[0] < Distancias[2] && Distancias[0] < Distancias[3]){
+			let Camino_Jugador1 = AI_Gabriel(Grafo, Posiciones[0], Meta_Jugador1, Posiciones, 0)
+			if(Valida_Paredes(Grafo, Posiciones[0], Camino_Jugador1[1])) Paredes[1]--
+			else{
+				let Camino = AI_Marco(Grafo, Posiciones[1], Meta_Jugador2, Posiciones)
+				console.log("Jugador 2 se mueve de: " + Posiciones[1] + " a " + Camino[1])
+				Posiciones[1] = Camino[1]
+			}
+		}
+		else if(Distancias[2] < Distancias[0] && Distancias[2] < Distancias[3]){
+			let Camino_Jugador3 = AI_Wilmar(Grafo, Posiciones[2], Meta_Jugador3)
+			if(Valida_Paredes(Grafo, Posiciones[2], Camino_Jugador3[1])) Paredes[1]--
+			else{
+				let Camino = AI_Marco(Grafo, Posiciones[1], Meta_Jugador2, Posiciones)
+				console.log("Jugador 2 se mueve de: " + Posiciones[1] + " a " + Camino[1])
+				Posiciones[1] = Camino[1]
+			}
+		}
+		else{
+			let Camino_Jugador4 = AI_Gabriel(Grafo, Posiciones[3], Meta_Jugador4, Posiciones, 3)
+			if(Valida_Paredes(Grafo, Posiciones[3], Camino_Jugador4[1])) Paredes[1]--
+			else{
+				let Camino = AI_Marco(Grafo, Posiciones[1], Meta_Jugador2, Posiciones)
+				console.log("Jugador 2 se mueve de: " + Posiciones[1] + " a " + Camino[1])
+				Posiciones[1] = Camino[1]
+			}
+		}
+	}
+	Turno = 2
+}
+
+function Jugador3(){
+	if(Meta_Jugador3.includes(Posiciones[2])){
+		Winner = true
+		alert("JUGADOR 3 GANADOR")
+	}
+	Distancias = Calcular_Jugadas_Restantes()
+	if((Distancias[2] <= Distancias[0] && Distancias[2] <= Distancias[1] && Distancias[2] <= Distancias[3]) || Paredes[2] == 0){
+		let Camino = AI_Wilmar(Grafo, Posiciones[2], Meta_Jugador3)
+		console.log("Jugador 3 se mueve de: " + Posiciones[2] + " a " + Camino[1])
+		Posiciones[2] = Camino[1]
+	}
+	else{
+		if(Distancias[0] < Distancias[1] && Distancias[0] < Distancias[3]){
+			let Camino_Jugador1 = AI_Gabriel(Grafo, Posiciones[0], Meta_Jugador1, Posiciones, 0)
+			if(Valida_Paredes(Grafo, Posiciones[0], Camino_Jugador1[1])) Paredes[2]--
+			else{
+				let Camino = AI_Wilmar(Grafo, Posiciones[2], Meta_Jugador3)
+				console.log("Jugador 3 se mueve de: " + Posiciones[2] + " a " + Camino[1])
+				Posiciones[2] = Camino[1]	
+			}
+		}
+		else if(Distancias[1] < Distancias[0] && Distancias[1] < Distancias[3]){
+			let Camino_Jugador2 = AI_Marco(Grafo, Posiciones[1], Meta_Jugador2, Posiciones)
+			if(Valida_Paredes(Grafo, Posiciones[1], Camino_Jugador2[1])) Paredes[2]--
+			else{
+				let Camino = AI_Wilmar(Grafo, Posiciones[2], Meta_Jugador3, Posiciones)
+				console.log("Jugador 3 se mueve de: " + Posiciones[2] + " a " + Camino[1])
+				Posiciones[2] = Camino[1]	
+			}
+		}
+		else{
+			let Camino_Jugador4 = AI_Gabriel(Grafo, Posiciones[3], Meta_Jugador4, Posiciones, 3)
+			if(Valida_Paredes(Grafo, Posiciones[3], Camino_Jugador4[1])) Paredes[2]--
+			else{
+				let Camino = AI_Wilmar(Grafo, Posiciones[2], Meta_Jugador3)
+				console.log("Jugador 3 se mueve de: " + Posiciones[2] + " a " + Camino[1])
+				Posiciones[2] = Camino[1]	
+			}
+		}
+	}
+	Turno = 3
+}
+
+function Simulación_Jugador4(){
+	Turno = 0
+}
+
+function Valida_Paredes(G, I, F){
+	G_aux = JSON.parse(JSON.stringify(G))
+	let Diferencia = Math.abs(I - F)
+	let Factor = 10 - Diferencia
+	let C = I - Factor
+	let D = F - Factor
+	if(!G.includes[C]){
+		C = I + Factor
+		D = F + Factor
+		if(C > 80 || D > 80) return false
+		if(!G_aux[C].includes(D)) return false
+	}
+	else if(!G_aux[C].includes(D)){
+		C = I + Factor
+		D = F + Factor
+		if(C > 80 || D > 80) return false
+		if(!G_aux[C].includes(D)) return false
+	}
+	if(!G_aux[I].includes(C) && !G_aux[F].includes(D)) return false
+	remove_edge(G_aux, I, F)
+	remove_edge(G_aux, C, D)
+
+	if(No_Encerrado(G_aux))	return false
+	else{
+		Grafo = JSON.parse(JSON.stringify(G_aux))
+		console.log("Pared entre: " + I + " " + F + " y " + C + " " + D)
+		return true
+	}
+}
+
+function Calcular_Jugadas_Restantes(){
+	let a = []
+	a.push(AI_Gabriel(Grafo, Posiciones[0], Meta_Jugador1, Posiciones, 0).length)
+	a.push(AI_Gabriel(Grafo, Posiciones[1], Meta_Jugador2, Posiciones, 1).length)
+	a.push(AI_Gabriel(Grafo, Posiciones[2], Meta_Jugador3, Posiciones, 2).length)
+	a.push(AI_Gabriel(Grafo, Posiciones[3], Meta_Jugador4, Posiciones, 3).length)
+	return a
+}
+
+function No_Encerrado(G){
+	let N = G.length
+	let Visitado = []
+	for(let i = 0; i < N; ++i) Visitado[i] = false
+	
+	function DFS(V){
+		Visitado[V] = true
+		for(let e = 0; e < G[V].length; ++e){
+			if(!Visitado[G[V][e]]){
+				DFS(G[V][e])
+			}
+		}
+	}
+
+	for(let v = 0; v < N; ++v){
+		if(!Visitado[v]){
+			if(v == 0){
+				DFS(v)
+			}
+			else return true
+		}
+	}
+	return false
+}
+
+window.onload = function(){
+	if(Turno == 0) Jugador1()
+
+}

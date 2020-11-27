@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="css/style.css">
-    <script src="js/script.js"></script>
+    
 	<title>Quoridor</title>
 </head>
 <body>
 	<div>
 		<h2>Turno: <span id="caja_turno">0</span></h2>
-		<p>El Jugador 3 es controlado con las teclas ASWD(A:Izquierda,S:Abajo,W:Arriba,D:Derecha), los demas jugadores son bots y ejecutan sus movimientos si el usuario apreta la tecla ENTER. Gana el jugador que cruce al lado opuesto del tablero respecto a su posición inicial.</p>
+		<p>El Jugador 3 es controlado con las teclas WASD (A:Izquierda,S:Abajo,W:Arriba,D:Derecha), los demas jugadores son bots y ejecutan sus movimientos si el usuario apreta la tecla ENTER. Gana el jugador que cruce al lado opuesto del tablero respecto a su posición inicial.</p>
+		<p>Ingresar Pared entre:</p>
+		<input type="number" id="numPared1" placeholder="">
+		<input type="number" id="numPared2" placeholder="">
+		<input type="submit" onclick="ponerPared()">
 	</div>
 	<div>
 		<table border="0" align="center">
@@ -37,15 +41,15 @@
 			<td id="pared-10"></td>
 			<td id="pared-11"></td>
 			<td id="pared-12"></td>
-			<td class="active" id="active pared-13"></td>
-			<td class="active" id="active pared-14"></td>
-			<td class="active" id="active pared-15"></td>
+			<td id="pared-13"></td>
+			<td id="pared-14"></td>
+			<td id="pared-15"></td>
 			<td id="pared-16"></td>
 			<td id="pared-17"></td>
 			<td id="pared-18"></td>
-			<td class="active" id="active pared-19"></td>
-			<td class="active" id="active pared-20"></td>
-			<td class="active" id="active pared-21"></td>
+			<td id="pared-19"></td>
+			<td id="pared-20"></td>
+			<td id="pared-21"></td>
 			<td id="pared-22"></td>
 			<td id="pared-23"></td>
 			<td id="pared-24"></td>
@@ -74,12 +78,11 @@
 			<td id="pared-34"></td>
 			<td id="pared-35"></td>
 			<td id="pared-36"></td>
-			<td id="pared-54"></td>
 			<td id="pared-37"></td>
 			<td id="pared-38"></td>
 			<td id="pared-39"></td>
 			<td id="pared-40"></td>
-			<td class="active" id="active pared-41"></td>
+			<td id="pared-41"></td>
 			<td id="pared-42"></td>
 			<td id="pared-43"></td>
 			<td id="pared-44"></td>
@@ -88,31 +91,31 @@
 			<td id="pared-47"></td>
 			<td id="pared-48"></td>
 			<td id="pared-49"></td>
+			<td id="pared-50"></td>
 		</tr>
 		<tr class="square">
 			<td class="square" id="celda-18"></td>
-			<td class="line" id="pared-50"></td>
+			<td class="line" id="pared-51"></td>
 			<td class="square" id="celda-19"></td>
-			<td class="line active" id=" active pared-51"></td>
-			<td class="square" id="celda-20"></td>
 			<td class="line" id="pared-52"></td>
-			<td class="square" id="celda-21"></td>
+			<td class="square" id="celda-20"></td>
 			<td class="line" id="pared-53"></td>
-			<td class="square" id="celda-22"></td>
+			<td class="square" id="celda-21"></td>
 			<td class="line" id="pared-54"></td>
-			<td class="square" id="celda-23"></td>
+			<td class="square" id="celda-22"></td>
 			<td class="line" id="pared-55"></td>
+			<td class="square" id="celda-23"></td>
+			<td class="line" id="pared-56"></td>
 			<td class="square" id="celda-24"></td>
-			<td class="line active" id="active pared-56"></td>
-			<td class="square" id="celda-25"></td>
 			<td class="line" id="pared-57"></td>
+			<td class="square" id="celda-25"></td>
+			<td class="line" id="pared-58"></td>
 			<td class="square" id="celda-26"></td>
 		</tr>
 		<tr class="line">
-			<td id="pared-58"></td>
 			<td id="pared-59"></td>
 			<td id="pared-60"></td>
-			<td class="active" id="active pared-61"></td>
+			<td id="pared-61"></td>
 			<td id="pared-62"></td>
 			<td id="pared-63"></td>
 			<td id="pared-64"></td>
@@ -122,111 +125,110 @@
 			<td id="pared-68"></td>
 			<td id="pared-69"></td>
 			<td id="pared-70"></td>
-			<td class="active" id="active pared-71"></td>
+			<td id="pared-71"></td>
 			<td id="pared-72"></td>
 			<td id="pared-73"></td>
 			<td id="pared-74"></td>
+			<td id="pared-75"></td>
 		</tr>
 		<tr class="square">
 			<td class="square" id="celda-27"></td>
-			<td class="line" id="pared-75"></td>
+			<td class="line" id="pared-76"></td>
 			<td class="square" id="celda-28"></td>
-			<td class="line active" id="active pared-76"></td>
+			<td class="line" id="pared-77"></td>
 			<td class="square" id="celda-29"></td>
-			<td class="line active" id="active pared-77"></td>
-			<td class="square" id="celda-30"></td>
 			<td class="line" id="pared-78"></td>
-			<td class="square" id="celda-31"></td>
+			<td class="square" id="celda-30"></td>
 			<td class="line" id="pared-79"></td>
+			<td class="square" id="celda-31"></td>
+			<td class="line" id="pared-80"></td>
 			<td class="square" id="celda-32"></td>
-			<td class="line active" id="active pared-80"></td>
+			<td class="line" id="pared-81"></td>
 			<td class="square" id="celda-33"></td>
-			<td class="active line" id="active pared-81"></td>
-			<td class="square" id="celda-34"></td>
 			<td class="line" id="pared-82"></td>
+			<td class="square" id="celda-34"></td>
+			<td class="line" id="pared-83"></td>
 			<td class="square" id="celda-35"></td>
 		</tr>
 		<tr class="line">
-			<td id="pared-83"></td>
 			<td id="pared-84"></td>
 			<td id="pared-85"></td>
 			<td id="pared-86"></td>
 			<td id="pared-87"></td>
-			<td class="active" id="active pared-88"></td>
+			<td id="pared-88"></td>
 			<td id="pared-89"></td>
 			<td id="pared-90"></td>
 			<td id="pared-91"></td>
 			<td id="pared-92"></td>
 			<td id="pared-93"></td>
-			<td class="active" id="pared-94"></td>
+			<td id="pared-94"></td>
 			<td id="pared-95"></td>
 			<td id="pared-96"></td>
 			<td id="pared-97"></td>
 			<td id="pared-98"></td>
 			<td id="pared-99"></td>
+			<td id="pared-100"></td>
 		</tr>
 		<tr class="square">
 			<td class="square" id="celda-36"><center><div class="jugador3" id="j3"></div></center></td>
-			<td class="line" id="pared-99"></td>
+			<td class="line" id="pared-101"></td>
 			<td class="square" id="celda-37"></td>
-			<td class="line" id="pared-100"></td>
-			<td class="square" id="celda-38"></td>
-			<td class="line active" id="active pared-101"></td>
-			<td class="square" id="celda-39"></td>
 			<td class="line" id="pared-102"></td>
-			<td class="square" id="celda-40"></td>
+			<td class="square" id="celda-38"></td>
 			<td class="line" id="pared-103"></td>
-			<td class="square" id="celda-41"></td>
-			<td class="line active" id="pared-104"></td>
-			<td class="square" id="celda-42"></td>
+			<td class="square" id="celda-39"></td>
+			<td class="line" id="pared-104"></td>
+			<td class="square" id="celda-40"></td>
 			<td class="line" id="pared-105"></td>
-			<td class="square" id="celda-43"></td>
+			<td class="square" id="celda-41"></td>
 			<td class="line" id="pared-106"></td>
+			<td class="square" id="celda-42"></td>
+			<td class="line" id="pared-107"></td>
+			<td class="square" id="celda-43"></td>
+			<td class="line" id="pared-108"></td>
 			<td class="square" id="celda-44"><center><div class="jugador4" id="j4"></div></center></td>
 		</tr>
 		<tr class="line">
-			<td id="pared-107"></td>
-			<td id="pared-108"></td>
 			<td id="pared-109"></td>
 			<td id="pared-110"></td>
 			<td id="pared-111"></td>
-			<td class="active" id="active pared-112"></td>
+			<td id="pared-112"></td>
 			<td id="pared-113"></td>
 			<td id="pared-114"></td>
 			<td id="pared-115"></td>
 			<td id="pared-116"></td>
 			<td id="pared-117"></td>
-			<td class="active" id="pared-118"></td>
+			<td id="pared-118"></td>
 			<td id="pared-119"></td>
 			<td id="pared-120"></td>
 			<td id="pared-121"></td>
 			<td id="pared-122"></td>
 			<td id="pared-123"></td>
+			<td id="pared-124"></td>
+			<td id="pared-125"></td>
 		</tr>
 		<tr class="square">
 			<td class="square" id="celda-45"></td>
-			<td class="line" id="pared-124"></td>
+			<td class="line" id="pared-126"></td>
 			<td class="square" id="celda-46"></td>
-			<td class="line active" id="active pared-125"></td>
-			<td class="square" id="celda-47"></td>
-			<td class="line active" id="active pared-126"></td>
-			<td class="square" id="celda-48"></td>
 			<td class="line" id="pared-127"></td>
-			<td class="square" id="celda-49"></td>
+			<td class="square" id="celda-47"></td>
 			<td class="line" id="pared-128"></td>
+			<td class="square" id="celda-48"></td>
+			<td class="line" id="pared-129"></td>
+			<td class="square" id="celda-49"></td>
+			<td class="line" id="pared-130"></td>
 			<td class="square" id="celda-50"></td>
-			<td class="line active" id="pared-129"></td>
-			<td class="square" id="celda-51"></td>
-			<td class="line active" id="pared-130 active"></td>
-			<td class="square" id="celda-52"></td>
 			<td class="line" id="pared-131"></td>
+			<td class="square" id="celda-51"></td>
+			<td class="line" id="pared-132"></td>
+			<td class="square" id="celda-52"></td>
+			<td class="line" id="pared-133"></td>
 			<td class="square" id="celda-53"></td>
 		</tr>
 		<tr class="line">
-			<td id="pared-132"></td>
-			<td id="pared-133"></td>
 			<td id="pared-134"></td>
-			<td class="active" id="active pared-135"></td>
+			<td id="pared-135"></td>
 			<td id="pared-136"></td>
 			<td id="pared-137"></td>
 			<td id="pared-138"></td>
@@ -236,40 +238,40 @@
 			<td id="pared-142"></td>
 			<td id="pared-143"></td>
 			<td id="pared-144"></td>
-			<td class="active" id="pared-145 active"></td>
+			<td id="pared-145"></td>
 			<td id="pared-146"></td>
 			<td id="pared-147"></td>
 			<td id="pared-148"></td>
+			<td id="pared-149"></td>
+			<td id="pared-150"></td>
 		</tr>
 		<tr class="square">
 			<td class="square" id="celda-54"></td>
-			<td class="line" id="pared-149"></td>
-			<td class="square" id="celda-55"></td>
-			<td class="line active" id="active pared-150"></td>
-			<td class="square" id="celda-56"></td>
 			<td class="line" id="pared-151"></td>
-			<td class="square" id="celda-57"></td>
+			<td class="square" id="celda-55"></td>
 			<td class="line" id="pared-152"></td>
-			<td class="square" id="celda-58"></td>
+			<td class="square" id="celda-56"></td>
 			<td class="line" id="pared-153"></td>
-			<td class="square" id="celda-59"></td>
+			<td class="square" id="celda-57"></td>
 			<td class="line" id="pared-154"></td>
-			<td class="square" id="celda-60"></td>
-			<td class="line active" id="active pared-155"></td>
-			<td class="square" id="celda-61"></td>
+			<td class="square" id="celda-58"></td>
+			<td class="line" id="pared-155"></td>
+			<td class="square" id="celda-59"></td>
 			<td class="line" id="pared-156"></td>
+			<td class="square" id="celda-60"></td>
+			<td class="line" id="pared-157"></td>
+			<td class="square" id="celda-61"></td>
+			<td class="line" id="pared-158"></td>
 			<td class="square" id="celda-62"></td>
 		</tr>
 		<tr class="line">
-			<td id="pared-157"></td>
-			<td id="pared-158"></td>
 			<td id="pared-159"></td>
 			<td id="pared-160"></td>
 			<td id="pared-161"></td>
 			<td id="pared-162"></td>
 			<td id="pared-163"></td>
 			<td id="pared-164"></td>
-			<td class="active" id="pared-165"></td>
+			<td id="pared-165"></td>
 			<td id="pared-166"></td>
 			<td id="pared-167"></td>
 			<td id="pared-168"></td>
@@ -278,66 +280,69 @@
 			<td id="pared-171"></td>
 			<td id="pared-172"></td>
 			<td id="pared-173"></td>
+			<td id="pared-174"></td>
+			<td id="pared-175"></td>
 		</tr>
 		<tr class="square">
 			<td class="square" id="celda-63"></td>
-			<td class="line" id="pared-174"></td>
-			<td class="square" id="celda-64"></td>
-			<td class="line" id="pared-175"></td>
-			<td class="square" id="celda-65"></td>
 			<td class="line" id="pared-176"></td>
-			<td class="square" id="celda-66"></td>
+			<td class="square" id="celda-64"></td>
 			<td class="line" id="pared-177"></td>
-			<td class="square" id="celda-67"></td>
+			<td class="square" id="celda-65"></td>
 			<td class="line" id="pared-178"></td>
-			<td class="square" id="celda-68"></td>
+			<td class="square" id="celda-66"></td>
 			<td class="line" id="pared-179"></td>
-			<td class="square" id="celda-69"></td>
+			<td class="square" id="celda-67"></td>
 			<td class="line" id="pared-180"></td>
-			<td class="square" id="celda-70"></td>
+			<td class="square" id="celda-68"></td>
 			<td class="line" id="pared-181"></td>
+			<td class="square" id="celda-69"></td>
+			<td class="line" id="pared-182"></td>
+			<td class="square" id="celda-70"></td>
+			<td class="line" id="pared-183"></td>
 			<td class="square" id="celda-71"></td>
 		</tr>
 		<tr class="line">
-			<td id="pared-182"></td>
-			<td id="pared-183"></td>
 			<td id="pared-184"></td>
 			<td id="pared-185"></td>
-			<td class="active" id="pared-186"></td>
-			<td class="active" id="pared-187"></td>
-			<td class="active" id="pared-188"></td>
+			<td id="pared-186"></td>
+			<td id="pared-187"></td>
+			<td id="pared-188"></td>
 			<td id="pared-189"></td>
 			<td id="pared-190"></td>
 			<td id="pared-191"></td>
-			<td class="active" id="pared-192"></td>
-			<td class="active" id="pared-193"></td>
-			<td class="active" id="pared-194"></td>
+			<td id="pared-192"></td>
+			<td id="pared-193"></td>
+			<td id="pared-194"></td>
 			<td id="pared-195"></td>
 			<td id="pared-196"></td>
 			<td id="pared-197"></td>
 			<td id="pared-198"></td>
+			<td id="pared-199"></td>
+			<td id="pared-200"></td>
 		</tr>
 		<tr class="square">
 			<td class="square" id="celda-72"></td>
-			<td class="line" id="pared-199"></td>
-			<td class="square" id="celda-73"></td>
-			<td class="line" id="pared-200"></td>
-			<td class="square" id="celda-74"></td>
 			<td class="line" id="pared-201"></td>
-			<td class="square" id="celda-75"></td>
+			<td class="square" id="celda-73"></td>
 			<td class="line" id="pared-202"></td>
-			<td class="square" id="celda-76"><center><div class="jugador1" id="j1"></div></center></td>
+			<td class="square" id="celda-74"></td>
 			<td class="line" id="pared-203"></td>
-			<td class="square" id="celda-77"></td>
+			<td class="square" id="celda-75"></td>
 			<td class="line" id="pared-204"></td>
-			<td class="square" id="celda-78"></td>
+			<td class="square" id="celda-76"><center><div class="jugador1" id="j1"></div></center></td>
 			<td class="line" id="pared-205"></td>
-			<td class="square" id="celda-79"></td>
+			<td class="square" id="celda-77"></td>
 			<td class="line" id="pared-206"></td>
+			<td class="square" id="celda-78"></td>
+			<td class="line" id="pared-207"></td>
+			<td class="square" id="celda-79"></td>
+			<td class="line" id="pared-208"></td>
 			<td class="square" id="celda-80"></td>
 		</tr>
 	</table>
 	</div>
 	<div></div>
+	<script src="js/script.js"></script>
 </body>
 </html>
