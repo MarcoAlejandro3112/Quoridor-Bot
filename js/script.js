@@ -10,14 +10,51 @@ let Meta_Jugador3 = [8,17,26,35,44,53,62,71,80]
 let Meta_Jugador4 = [0,9,18,27,36,45,54,63,72]
 let Distancias = []
 let winner = false
-
-function ponerPared(){
-	a = document.getElementById("numPared1").value
-	b = document.getElementById("numPared2").value
-	dibujarPared(a,b);
-	remove_edge(a,b);
+let conteoParedes = 1
+for (let i = 0; i < nn; i++){
+    Grafo[i] = new Array()
 }
-
+for (let v = 0; v < nn; v++){
+    if (v >= n) {
+        let u = v - n;
+        Grafo[v].push(u);
+        Grafo[u].push(v);
+    }
+    if (v % n != 0) {
+        let u = v - 1;
+        Grafo[v].push(u)
+        Grafo[u].push(v)
+    }
+}
+console.log(Grafo)
+function ponerPared(){
+	console.log(turno)
+	if(turno == 3 && conteoParedes <= 2){
+		a = document.getElementById("numPared1").value
+		b = document.getElementById("numPared2").value
+		remove_edge(Grafo,parseInt(a),parseInt(b))
+		dibujarPared(parseInt(a),parseInt(b))
+		conteoParedes++
+	}
+	if(conteoParedes > 2){
+		turno = cambiar_turno(3)
+	}
+	
+}
+function Valida_paredes_usuario(G, A, B){
+	G_aux = JSON.parse(JSON.stringify(G))
+	if(!G_aux[A].includes(B)) return B
+	if(!G_aux[I].includes(C) && !G_aux[F].includes(D)) return false
+	remove_edge(G_aux, A, B)
+	remove_edge(G_aux, C, D)
+	if(No_Encerrado(G_aux))	return false
+	else{
+		Grafo = JSON.parse(JSON.stringify(G_aux))
+		dibujarPared(Math.min(A,B),Math.max(A,B))
+		dibujarPared(Math.min(C,D),Math.max(C,D))
+		return true
+	}
+}
 /*ENUMERAR PAREDES*/
 /*let count = 1
 let bImpar = true;
@@ -93,21 +130,7 @@ class Stack{
        console.log(this.data[index])
     }
 }
-for (let i = 0; i < nn; i++){
-    Grafo[i] = new Array()
-}
-for (let v = 0; v < nn; v++){
-    if (v >= n) {
-        let u = v - n;
-        Grafo[v].push(u);
-        Grafo[u].push(v);
-    }
-    if (v % n != 0) {
-        let u = v - 1;
-        Grafo[v].push(u)
-        Grafo[u].push(v)
-    }
-}
+
 
 function dibujarPared(a,b){
 	aux1 = a,aux2 = b
@@ -582,11 +605,10 @@ function dibujarPared(a,b){
 }
 
 function remove_edge(G, a, b){
-	G[a].splice(G[a].indexOf(b), 1)
-	G[b].splice(G[b].indexOf(a), 1)
-	
+	G[a].splice(G[a].indexOf(b), 1);
+  	G[b].splice(G[b].indexOf(a), 1);
 }
-
+console.log(Grafo)
 function AI_Gabriel(g, s, w, p, num) {
 	var aux_move = null
 	var aux_idx = 0
@@ -1022,30 +1044,34 @@ function desplazar(tecla){
 	switch (tecla){
 		/*SI PRESIONA ENTER*/
 		case 13:
-			if(turno == 0){
-				Jugador1()
-	    		moverFicha(posiciones[0],ficha)
-	    		if(Meta_Jugador1.includes(posiciones[0])){
-	    			alert("GANO EL JUGADOR 0")
-	    			winner = true;
-	    		}
-			} else if(turno == 1){
-				
-				Jugador2()
-				moverFicha(posiciones[1],ficha)
-	    		if(Meta_Jugador2.includes(posiciones[1])){
-	    			alert("GANO EL JUGADOR 1")
-	    			winner = true;
-	    		}
-	    		turno = cambiar_turno(1)
-			} else if(turno == 2){
-				Jugador3()
-				moverFicha(posiciones[2],ficha)
-	    		if(Meta_Jugador3.includes(posiciones[2])){
-	    			alert("GANO EL JUGADOR 2")
-	    			winner = true;
-	    		}
-			} 
+			if(!winner){
+				if(turno == 0){
+					Jugador1()
+		    		moverFicha(posiciones[0],ficha)
+		    		if(Meta_Jugador1.includes(posiciones[0])){
+		    			alert("GANO EL JUGADOR 0")
+		    			document.getElementById("caja_turno").innerHTML = "GANO EL JUGADOR 0"
+		    			winner = true;
+		    		}
+				} else if(turno == 1){
+					
+					Jugador2()
+					moverFicha(posiciones[1],ficha)
+		    		if(Meta_Jugador2.includes(posiciones[1])){
+		    			alert("GANO EL JUGADOR 1")
+		    			document.getElementById("caja_turno").innerHTML = "GANO EL JUGADOR 1"
+		    			winner = true;
+		    		}
+				} else if(turno == 2){
+					Jugador3()
+					moverFicha(posiciones[2],ficha)
+		    		if(Meta_Jugador3.includes(posiciones[2])){
+		    			alert("GANO EL JUGADOR 2")
+		    			document.getElementById("caja_turno").innerHTML = "GANO EL JUGADOR 2"
+		    			winner = true;
+		    		}
+				} 
+			}
 			//cambiar_turno(turno)
 		break;
 		case 97:
@@ -1056,11 +1082,13 @@ function desplazar(tecla){
 						if(condicionales_J1("Izquierda")) posiciones[turno] -= 1
 					}
 					moverFicha(posiciones[3],ficha)
+					turno = cambiar_turno(3)
 				}
-				turno = cambiar_turno(3)
+				
 			}
 			if(Meta_Jugador4.includes(posiciones[3])){
 	    		alert("GANO EL JUGADOR 3")
+	    		document.getElementById("caja_turno").innerHTML = "GANO EL JUGADOR 3"
 	    		winner = true;
 	    	}
 	    	
@@ -1073,11 +1101,13 @@ function desplazar(tecla){
 						if(condicionales_J1("Abajo")) posiciones[turno] -= 9
 					}
 					moverFicha(posiciones[3],ficha)
+					turno = cambiar_turno(3)
 				}
-				turno = cambiar_turno(3)
+				
 			}
 			if(Meta_Jugador4.includes(posiciones[3])){
 	    		alert("GANO EL JUGADOR 3")
+	    		document.getElementById("caja_turno").innerHTML = "GANO EL JUGADOR 3"
 	    		winner = true;
 	    	}
 	    	
@@ -1090,11 +1120,13 @@ function desplazar(tecla){
 						if(condicionales_J1("Derecha")) posiciones[turno] += 1
 					}
 					moverFicha(posiciones[3],ficha)
+					turno = cambiar_turno(3)
 				}
-				turno = cambiar_turno(3)
+				
 			}
 			if(Meta_Jugador4.includes(posiciones[3])){
 	    		alert("GANO EL JUGADOR 3")
+	    		document.getElementById("caja_turno").innerHTML = "GANO EL JUGADOR 3"
 	    		winner = true;
 	    	}
 		break;
@@ -1106,11 +1138,13 @@ function desplazar(tecla){
 						if (condicionales_J1("Arriba")) posiciones[turno] += 9
 					}
 					moverFicha(posiciones[3],ficha)
+					turno = cambiar_turno(3)
 				}
-				turno = cambiar_turno(3)
+				
 			}
 			if(Meta_Jugador4.includes(posiciones[3])){
 	    		alert("GANO EL JUGADOR 3")
+	    		document.getElementById("caja_turno").innerHTML = "GANO EL JUGADOR 3"
 	    		winner = true;
 	    	}
 	    	
