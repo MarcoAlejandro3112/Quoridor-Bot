@@ -86,7 +86,7 @@ for(i = 1;i<=208;i++){
 	
 }*/
 
-for(i = 0;i<80;i++){
+for(i = 0;i<=80;i++){
 	document.getElementById("celda-" + i).innerHTML+=i.toString()
 }
 class Stack{
