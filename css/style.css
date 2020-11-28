@@ -1,6 +1,9 @@
 .active{
 	background-color: brown!important;
 }
+body {
+    padding: 1rem;
+}
 div{
 	width: 45%;
 	float: left;
@@ -10,6 +13,10 @@ div.first-child{
 }
 input[type="number" i] {
     margin: 0 1rem;
+    padding: 0.5rem 1rem;
+}
+input[type="submit" i]{
+    padding: 0.5rem 0.5rem;
 }
 
 div h2{
@@ -19,9 +26,10 @@ div h2{
 }
 div p{
 	font-family: "Roboto",sans-serif;
-	font-size: 0.8rem!important;
+	font-size: 1.5rem!important;
 	padding: 0rem 1rem;
-	line-height: 1.5rem;
+	line-height: 2.5rem;
+    text-align: justify;
 }
 table {
 	margin:10% auto;
@@ -29,31 +37,31 @@ table {
 }
 tr.square {
     border-radius: 10%;
-    width: 22px;
-    color:#fff;
-    font-size: 0.1rem;
+    width: 44px;
+    font-size: 0.3rem;
     text-align: center;
-    height: 22px;
+    height: 44px;
 }
 
 td.square {
 	background-color:#2C3E50;
     border-radius: 10%;
-    width: 22px;
-    height: 22px;
-    font-size: 0.1rem;
+    color:#fff;
+    width: 44px;
+    height: 44px;
+    font-size: 1rem;
     text-align: center;
 }
 tr.line {
 	background-color: white;
     width: 7px;
     height: 7px;
-    font-size: 0.1rem;
+    font-size: 0.3rem;
     text-align: center;
 }
 td.line {
 	background-color: white;
-    font-size: 0.1rem;
+    font-size: 0.3rem;
     text-align: center;
     width: 3px;
     height: 3px;

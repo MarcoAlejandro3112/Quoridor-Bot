@@ -37,7 +37,7 @@ function ponerPared(){
 		conteoParedes++
 	}
 	if(conteoParedes > 2){
-		turno = cambiar_turno(3)
+		turno = cambiar_turno(2)
 	}
 	
 }
